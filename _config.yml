@@ -1,5 +1,4 @@
 # Dependencies
-markdown:         redcarpet
 highlighter:      rouge
 
 # Permalinks
@@ -18,4 +17,3 @@ author:
 
 
 # Custom vars
-highlighter: pygments
