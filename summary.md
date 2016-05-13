@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Conclusion
+title: Summary
 ---
 
 <p class="message">
@@ -8,6 +8,5 @@ title: Conclusion
 </p>
 
 
-## Conclusion
 
 $$a^2 + b^2 = c^2$$
