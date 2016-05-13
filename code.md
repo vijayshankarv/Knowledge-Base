@@ -140,5 +140,7 @@ $CAFFE_ROOT/build/tools/caffe train \
       -gpu 0 #Only if you have a GPU, else you should ignore this flag
 {% endhighlight %}
 
+If you are running the training in GPU mode, and you get an `out of memory` error, then you can try reducing the training and testing `batch_size` in `train_val.prototxt` in line_number `17` and `36`.
+
 ## Prediction
 --TO-DO
