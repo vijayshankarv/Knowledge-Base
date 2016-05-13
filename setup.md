@@ -119,7 +119,16 @@ $CAFFE_ROOT/build/tools/convert_imageset \
 
 which should spit out something along these lines : [http://pastebin.com/ptymwZDm](http://pastebin.com/ptymwZDm)
 
-**NOTE:** `$CAFFE_ROOT` is the environment variable which should point to your caffe installation root. If the `bin` folder of your Caffe installation is in your system path, you can also simply try `convert_imageset` instead of `$CAFFE_ROOT/build/tools/convert_imageset`   
-
 A quick guide to some other features of the `convert_imageset` utility can be found [here](http://stackoverflow.com/questions/31427094/guide-to-use-convert-imageset-cpp#answer-31431716  
 ).
+
+Then finally we compute the image mean for the training set which will be used later during both the training and prediction.
+
+{% highlight bash %}
+
+cd /home/<your_user_name>/plantvillage
+$CAFFE_ROOT/build/tools/compute_image_mean lmdb/train_lmdb lmdb/mean.binaryproto
+
+{% endhighlight %}
+
+**NOTE:** `$CAFFE_ROOT` is the environment variable which should point to your caffe installation root. If the `bin` folder of your Caffe installation is in your system path, you can also simply try `convert_imageset` instead of `$CAFFE_ROOT/build/tools/convert_imageset`  and  `compute_image_mean` instead of `$CAFFE_ROOT/build/tools/compute_image_mean`
