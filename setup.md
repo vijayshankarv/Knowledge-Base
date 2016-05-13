@@ -42,7 +42,7 @@ To be able to get an estimate of how well the model if performing across the who
 import glob
 import os
 import random
-
+import shutil
 
 TRAIN_PERCENTAGE = 70
 
@@ -53,10 +53,19 @@ VAL_SET = []
 for _image in glob.glob("crowdai/*/*"):
 	className = _image.split("/")[-2]
 
+	# Some fileNames contain spaces, which creates some incompatibility with a preprocessing script shipped with caffe
+	# Hence we replace all spaces in the filename with _
+	newFileName = _image.split("/")[-1]
+	newFileName = newFileName.replace(" ", "_")
+	newFilePath = "crowdai/"+className+"/"+newFileName
+	shutil.move(_image, newFilePath)
+
+
+
 	if random.randint(0,100) < TRAIN_PERCENTAGE:
-		TRAIN_SET.append((_image, className.split("_")[-1]))
+		TRAIN_SET.append((newFilePath, className.split("_")[-1]))
 	else:
-		VAL_SET.append((_image, className.split("_")[-1]))
+		VAL_SET.append((newFilePath, className.split("_")[-1]))
 
 #Write the distribution into a separate text files
 try:
@@ -108,6 +117,8 @@ $CAFFE_ROOT/build/tools/convert_imageset \
     lmdb/val_lmdb
 {% endhighlight %}
 
+**NOTE:** `$CAFFE_ROOT` is the environment variable which should point to your caffe installation root. If the `bin` folder of your Caffe installation is in your system path, you can also simply try `convert_imageset` instead of `$CAFFE_ROOT/build/tools/convert_imageset`   
+
 which should spit out something along these lines....
 
 {% highlight output%}
@@ -151,5 +162,3 @@ I0513 06:11:21.458154 20300 convert_imageset.cpp:150] Processed 6673 files.
 
 A quick guide to some other features of the `convert_imageset` utility can be found [here](http://stackoverflow.com/questions/31427094/guide-to-use-convert-imageset-cpp#answer-31431716  
 ).
-
-**NOTE:** `$CAFFE_ROOT` is the environment variable which should point to your caffe installation root. If the `bin` folder of your Caffe installation is in your system path, you can also simply try `convert_imageset` instead of `$CAFFE_ROOT/build/tools/convert_imageset`
