@@ -137,11 +137,8 @@ cd /home/<your_user_name>/plantvillage/AlexNet
 $CAFFE_ROOT/build/tools/caffe train \
       -solver solver.prototxt \
       -weights bvlc_reference_caffenet.caffemodel
-
+      -gpu 0 #Only if you have a GPU, else you should ignore this flag
 {% endhighlight %}
-
-If you **do have access to a GPU**, then you can simply add a `-gpu 0` flag to the previous command.
-
 
 ## Prediction
 --TO-DO
