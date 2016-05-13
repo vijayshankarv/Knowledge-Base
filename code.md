@@ -57,10 +57,10 @@ to look like :
   transform_param {
     mirror: true
     crop_size: 227
-    mean_file: "lmdb/mean.binaryproto"
+    mean_file: "../lmdb/mean.binaryproto"
   }
   data_param {
-    source: "lmdb/train_lmdb"
+    source: "../lmdb/train_lmdb"
     batch_size: 256
     backend: LMDB
   }
@@ -93,10 +93,10 @@ to look like :
   transform_param {
     mirror: false
     crop_size: 227
-    mean_file: "lmdb/mean.binaryproto"
+    mean_file: "../lmdb/mean.binaryproto"
   }
   data_param {
-    source: "lmdb/val_lmdb"
+    source: "../lmdb/val_lmdb"
     batch_size: 50
     backend: LMDB
   }
@@ -127,6 +127,33 @@ sed -i 's/fc8/fc8_plantvillage/' deploy.prototxt
 ### Configuring the Solver Parameters
 
 In the final step before we can start training, we need to configure the solver parameters in `solver.prototxt`. To start with, we should start with a base learning rate of `0.001`. The reason being, as we will be finetuning an already trained model, the model is in principle much ahead in the training phase in contrast to when you try to start training from scratch. Then we will start experimenting by running the training for `30 epochs`, where 1 epoch basically refers to one full pass through the training set.
+
+The final `solver.prototxt` should look like :
+
+{% highlight prototxt %}
+net: "train_val.prototxt"
+test_iter: 3
+test_interval: 59
+base_lr: 0.001
+lr_policy: "step"
+gamma: 0.1
+stepsize: 590
+display: 11
+max_iter: 1770
+momentum: 0.9
+weight_decay: 0.0005
+snapshot: 59
+snapshot_prefix: "../snapshots/snapshots_"
+solver_mode: GPU
+{% endhighlight %}
+
+**NOTE:** The `solver_mode` parameter should be set to `CPU` if you do not have access to a GPU on the host machine. Apart from that, these parameters are mostly hyperparameters which you will need to hand tune a bit till you are confident you get the best results.
+
+we will also need to create a folder called as `snapshots` where caffe can dump the models at certain intervals. Based on the reference we gave in our `solver.prototxt`, we will have to create it at : `/home/<your_user_name>/plantvillage/snapshots`, so we should simply do a :
+
+{% highlight bash %}
+mkdir /home/<your_user_name>/plantvillage/snapshots
+{% endhighlight %}
 
 ## Training
 
