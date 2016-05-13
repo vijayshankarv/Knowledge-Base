@@ -104,17 +104,44 @@ to look like :
 
 ### Adapting the downloaded AlexNet model for FineTuning on our dataset
 
-As the dataset we are working with needs to be classified across 38 classes instead of the standard 1000 classes that AlexNet was designed for; we will first change the number of outputs of the final layer from 1000 to 38. This can be done by manually editing the corresponding section for the last layer (`fc8` in this case) in both the `train_val.prototxt` and `deploy.prototxt`. The `num_outputs` value in that layer needs to be changed to 38 from 1000. And this can be quickly done by using :
+As the dataset we are working with needs to be classified across 38 classes instead of the standard 1000 classes that AlexNet was designed for; we will first change the number of outputs of the final layer from 1000 to 38. This can be done by manually editing the corresponding section for the last layer (`fc8` in this case) in both the `train_val.prototxt` and `deploy.prototxt`. The `num_output` value in that layer needs to be changed to 38 from 1000. And this can be quickly done by using :
 
 {% highlight bash %}
+cd /home/<your_user_name>/plantvillage/AlexNet
+
 sed -i 's/num_output: 1000/num_output: 38/' train_val.prototxt
 
 sed -i 's/num_output: 1000/num_output: 38/' deploy.prototxt
 {% endhighlight %}
 
+Then we also need to reset the weights in the last layer of the network, which can be very easily done by renaming the last layer, so that Caffe has to re-initialize the weights of the layer when it does not find any corresponding weights in the associated layer. This can be done by manually renaming all references to `fc8` (the last layer) in both `train_val.prototxt` and `deploy.prototxt` to `fc8_plantvillage`. Or, it can be quickly done by using :
+
+{% highlight bash %}
+cd /home/<your_user_name>/plantvillage/AlexNet
+
+sed -i 's/fc8/fc8_plantvillage/' train_val.prototxt
+
+sed -i 's/fc8/fc8_plantvillage/' deploy.prototxt
+{% endhighlight %}
+
+### Configuring the Solver Parameters
+
+In the final step before we can start training, we need to configure the solver parameters in `solver.prototxt`. To start with, we should start with a base learning rate of `0.001`. The reason being, as we will be finetuning an already trained model, the model is in principle much ahead in the training phase in contrast to when you try to start training from scratch. Then we will start experimenting by running the training for `30 epochs`, where 1 epoch basically refers to one full pass through the training set.
 
 ## Training
---Start Training
+
+If you followed all the previous steps correctly, then you should be able to start the training simply by :
+
+{% highlight bash %}
+cd /home/<your_user_name>/plantvillage/AlexNet
+$CAFFE_ROOT/build/tools/caffe train \
+      -solver solver.prototxt \
+      -weights bvlc_reference_caffenet.caffemodel
+
+{% endhighlight %}
+
+If you **do have access to a GPU**, then you can simply add a `-gpu 0` flag to the previous command.
+
 
 ## Prediction
---Predict and submit output file
+--TO-DO
