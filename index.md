@@ -3,6 +3,13 @@ layout: page
 title: Introduction
 ---
 
+<p class="message">
+  <strong>NOTE:</strong> This tutorial uses a Transfer Learning (FineTuning) based approach to solve
+  the particular problem, which in itself is against the rules of the <a href="https://www.crowdai.org/challenges/1">PlantVillage Classification Challenge</a>. Hence you should use this tutorial to get used
+  to basic ideas when it comes to approaching this and similar problems, and not to "generate" a submission
+  for the said CrowdAI challenge. All submissions made by using a Transfer Learning approach (as described in the tutorial, or otherwise) will be disqualified.
+</p>
+
 CrowdAI’s educational vision is to become a great open access learning resource
 for data analysis and machine learning. To make this happen, we are launching
 the CrowdAI Knowledge Base, a place where everyone in the community comes together to build high quality resources to help data scientists at all levels of expertise,
