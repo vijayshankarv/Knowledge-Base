@@ -282,4 +282,4 @@ python predict.py
 
 {% endhighlight %}
 
-Finally after this script executes successfully (this will take some time ;) So, be patient !! ), you should have a `output.csv` in the format that the CrowdAI PlantVillage Classification Challenge expects. **But please note that you will be disqualified if you use this approach to make a submission, as FineTuning / Transfer Learning based approaches are not allowed according to the rules of the challenge. **
+Finally after this script executes successfully (this will take some time ;) So, be patient !! ), you should have a `output.csv` in the format that the CrowdAI PlantVillage Classification Challenge expects. **But please note that you will be disqualified if you use this approach to make a submission, as FineTuning / Transfer Learning based approaches are not allowed according to the rules of the challenge.**
