@@ -185,7 +185,7 @@ Before we can predict the class of the images, we will have to first make them s
 {% highlight bash %}
 #!/bin/bash
 
-TEST_FOLDER_NAME="test"
+TEST_FOLDER_NAME="/home/<your_user_name>/plantvillage/test"
 for file in `ls $TEST_FOLDER_NAME`
 do
 echo $file
