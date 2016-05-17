@@ -5,9 +5,9 @@ title: Introduction
 
 <p class="message">
   <strong>NOTE:</strong> This tutorial uses a "Transfer Learning" or "Fine Tuning" approach to solve
-  the classification problem. This tutorial should be used to assist in development of basic ideas when it comes to approaching this and similar problems, and is not intended to "generate" a submission for the said CrowdAI challenge.
+  the image classification problem. This tutorial should be used to assist in development of basic ideas when it comes to approaching this and similar problems. 
   
-  Transfer Learning is against the rules of the <a href="https://www.crowdai.org/challenges/1">PlantVillage Classification Challenge</a>. <strong>All submissions made by using a Transfer Learning approach (as described in the tutorial, or otherwise) will be disqualified.</strong>
+  Transfer Learning is against the rules of the <a href="https://www.crowdai.org/challenges/1">PlantVillage Classification Challenge</a>, and this tutorial is not intended to "generate" a submission. <strong>All submissions made by using a Transfer Learning approach (as described in the tutorial, or otherwise) will be disqualified.</strong>
 </p>
 
 CrowdAI’s educational vision is to become a great open access learning resource
