@@ -19,7 +19,7 @@ from beginners to experts.
 [PlantVillage Classification Challenge](https://www.crowdai.org/challenges/1)
 hosted on [CrowdAI](https://www.crowdai.org).   
 
-The goal of the challenge is to classify a set of images of plant leaves into 38 possible crop-disease pairs.
+The goal of the challenge is to classify a set of images of plant leaves into 38 possible crop-disease pairs (see [original paper here](http://arxiv.org/abs/1604.03169)). 
 Here are a few examples from across all the 38 crop-disease pairs represented in the PlantVillage dataset.   
 ![PlantVillageDataset](https://s3.amazonaws.com/salathegroup-static/plantvillage/plantvillage-min.png)
 
