@@ -246,6 +246,8 @@ mean_arr = np.array( caffe.io.blobproto_to_array(blob) )[0]
 #        instead of the `set_mode_gpu` call.
 caffe.set_mode_gpu()
 #caffe.set_mode_cpu()
+
+
 net = caffe.Classifier(MODEL_FILE, PRETRAINED,
                        mean=mean_arr.mean(1).mean(1),
                        channel_swap=(2,1,0),
