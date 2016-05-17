@@ -271,5 +271,13 @@ for _file in glob.glob("./test/*"):
 	print "**********************************************"
 {% endhighlight %}
 
+and then execute it by
+
+{% highlight bash %}
+
+cd /home/<your_user_name>/plantvillage
+python predict.py
+
+{% endhighlight %}
 
 Finally after this script executes successfully (this will take some time ;) So, be patient !! ), you should have a `output.csv` file that you should be able to upload to the PlantVillage Classification Challenge on CrowdAI.
