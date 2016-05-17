@@ -170,4 +170,106 @@ $CAFFE_ROOT/build/tools/caffe train \
 If you are running the training in GPU mode, and you get an `out of memory` error, then you can try reducing the training and testing `batch_size` in `train_val.prototxt` in line_number `17` and `36`.
 
 ## Prediction
---TO-DO :: Stay Tuned !!
+
+The first step is to select the model that we will use to predict. In the `snapshots` folder, you will find many files of the form `snapshots__<iteration_number>.caffemodel` or `snapshots__<iteration_number>.solverstate`. The `*.solverstate` files are used to "resume" the training from a particular state, while the `*.caffemodel` files is primarily used for prediction, but it is pretty much the same as the solverstate file minus some training specific state variables. So we will select the latest model from among the snapshots, and use that in the following sub section for prediction all the test images. You can do that by :
+
+{% highlight bash %}
+cd /home/<your_user_name>/plantvillage/
+cp snapshots/`ls -t snapshots/ | head -n 1` plantvillage.caffemodel
+{% endhighlight %}
+
+Please note that, if you want to use the snapshot from any other iteration that the latest iteration, you can also do something like `cp snapshots/snapshots__<iteration_number>.caffemodel plantvillage.caffemodel`
+
+And now we move to the actual predictions of all the test images.
+Before we can predict the class of the images, we will have to first make them similar to the kind of images we used for training. Before we initiated the training, we "squashed" the images to `256x256 pixels`, and now we do the same to all the test images. You can do that by creating the following script at `/home/<your_user_name>/plantvillage/resize_test_images.sh`:
+{% highlight bash %}
+#!/bin/bash
+
+TEST_FOLDER_NAME="test"
+for file in `ls $TEST_FOLDER_NAME`
+do
+echo $file
+convert $TEST_FOLDER_NAME/$file -resize 256x256! $TEST_FOLDER_NAME/$file
+done
+{% endhighlight %}
+
+Then you can execute it by :
+{% highlight bash %}
+cd /home/<your_user_name>/plantvillage
+chmod +x resize_test_images.sh
+./resize_test_images.sh
+{% endhighlight %}
+
+Now that we have everything in order, we can use the following script to get started on how to make the predictions and put it in an appropriate format for the crowdAI PlantVillage Classification Challenge. This script has to exist at the location `/home/<your_user_name>/plantvillage/predict.py`.
+
+{% highlight python %}
+import numpy as np
+import matplotlib.pyplot as plt
+from PIL import Image
+import os
+import glob
+
+"""
+# You can use the commented block of code below to
+$ make sure that caffe is on the python path:
+# This takes the path to caffe_root from the environment variable, so make sure
+# the $CAFFE_ROOT environment variable is set
+#
+#
+caffe_root = os.environ['CAFFE_ROOT']
+import sys
+sys.path.insert(0, caffe_root + 'python')
+"""
+
+import caffe
+
+"""
+Adapted from from : http://www.cc.gatech.edu/~zk15/deep_learning/classify_test.py
+"""
+
+# Set the right path to your model definition file, pretrained model weights,
+# and the image you would like to classify.
+MODEL_FILE = 'AlexNet/deploy.prototxt'
+PRETRAINED = 'plantvillage.caffemodel'
+BINARY_PROTO_MEAN_FILE = "lmdb/mean.binaryproto"
+
+"""
+Replicated from https://github.com/BVLC/caffe/issues/290
+"""
+blob = caffe.proto.caffe_pb2.BlobProto()
+data = open( BINARY_PROTO_MEAN_FILE  , 'rb' ).read()
+blob.ParseFromString(data)
+mean_arr = np.array( caffe.io.blobproto_to_array(blob) )[0]
+
+
+##NOTE : If you do not have a GPU, you can uncomment the `set_mode_cpu()` call
+#        instead of the `set_mode_gpu` call.
+caffe.set_mode_gpu()
+#caffe.set_mode_cpu()
+net = caffe.Classifier(MODEL_FILE, PRETRAINED,
+                       mean=mean_arr.mean(1).mean(1),
+                       channel_swap=(2,1,0),
+                       raw_scale=255,
+                       image_dims=(256, 256))
+
+f = open("output.csv", "w")
+f.write("filename,c_0,c_1,c_2,c_3,c_4,c_5,c_6,c_7,c_8,c_9,c_10,c_11,c_12,c_13,c_14,c_15,c_16,c_17,c_18,c_19,c_20,c_21,c_22,c_23,c_24,c_25,c_26,c_27,c_28,c_29,c_30,c_31,c_32,c_33,c_34,c_35,c_36,c_37\n")
+
+number_of_files_processed = 0
+for _file in glob.glob("./test/*"):
+	number_of_files_processed += 1
+	FileName = _file.split("/")[-1]
+	input_image = caffe.io.load_image(_file)
+	prediction = net.predict([input_image])
+	s = FileName+","
+	for probability in prediction[0]:
+		s+=str(probability)+","
+	s = s[:-1]+"\n"
+	f.write(s)
+	print "Number of files : ", number_of_files_processed
+	print 'predicted class:', prediction[0].argmax()
+	print "**********************************************"
+{% endhighlight %}
+
+
+Finally after this script executes successfully (this will take some time ;) So, be patient !! ), you should have a `output.csv` file that you should be able to upload to the PlantVillage Classification Challenge on CrowdAI.
