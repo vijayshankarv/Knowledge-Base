@@ -14,6 +14,7 @@ where the participants attempt to classify a large number of images from the [Im
   We will in particular be focussing on [AlexNet](http://papers.nips.cc/paper/4824-imagenet-classification-w), the winning solution in ILSVRC 2012.
 
   ![AlexNet Visualization](http://image.slidesharecdn.com/pydatatalk-150729202131-lva1-app6892/95/deep-learning-with-python-pydata-seattle-2015-35-638.jpg?cb=1438315555)
+  (Image Source : [Deep Learning with Python-PyData Seattle 2015](http://www.slideshare.net/AlexanderKorbonits/deep-learning-with-python-pydata-seattle-2015))   
 
   This tutorial is more meant to be a hands on guide, so we will not get into all the details and basic concepts that fuel Deep Learning Architectures like that of AlexNet, but if you are curious and want to develop a proper intuition behind many of these ideas, we would strongly recommend [Michael Nielsen](http://michaelnielsen.org/)'s free online book [Neural Networks and Deep Learning](http://neuralnetworksanddeeplearning.com/).    
 
