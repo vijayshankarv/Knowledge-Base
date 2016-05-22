@@ -109,9 +109,9 @@ As the dataset we are working with needs to be classified across 38 classes inst
 {% highlight bash %}
 cd /home/<your_user_name>/plantvillage/AlexNet
 
-sed -i 's/num_output: 1000/num_output: 38/' train_val.prototxt
+sed -i -e 's/num_output: 1000/num_output: 38/' train_val.prototxt
 
-sed -i 's/num_output: 1000/num_output: 38/' deploy.prototxt
+sed -i -e 's/num_output: 1000/num_output: 38/' deploy.prototxt
 {% endhighlight %}
 
 Then we also need to reset the weights in the last layer of the network, which can be very easily done by renaming the last layer, so that Caffe has to re-initialize the weights of the layer when it does not find any corresponding weights in the associated layer. This can be done by manually renaming all references to `fc8` (the last layer) in both `train_val.prototxt` and `deploy.prototxt` to `fc8_plantvillage`. Or, it can be quickly done by using :
@@ -119,9 +119,9 @@ Then we also need to reset the weights in the last layer of the network, which c
 {% highlight bash %}
 cd /home/<your_user_name>/plantvillage/AlexNet
 
-sed -i 's/fc8/fc8_plantvillage/' train_val.prototxt
+sed -i -e 's/fc8/fc8_plantvillage/' train_val.prototxt
 
-sed -i 's/fc8/fc8_plantvillage/' deploy.prototxt
+sed -i -e 's/fc8/fc8_plantvillage/' deploy.prototxt
 {% endhighlight %}
 
 ### Configuring the Solver Parameters
@@ -163,7 +163,7 @@ If you followed all the previous steps correctly, then you should be able to sta
 cd /home/<your_user_name>/plantvillage/AlexNet
 $CAFFE_ROOT/build/tools/caffe train \
       -solver solver.prototxt \
-      -weights bvlc_reference_caffenet.caffemodel
+      -weights bvlc_alexnet.caffemodel
       -gpu 0 #Only if you have a GPU, else you should ignore this flag
 {% endhighlight %}
 
