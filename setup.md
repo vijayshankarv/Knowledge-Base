@@ -30,7 +30,7 @@ tar xvf crowdai_test.tar
 
 To be able to get an estimate of how well the model if performing across the whole training, we will take a small subset of the training set and consider it as out validation set. We can do this by using the following python script:
 
-{% highlight python %}
+```python
 #!/usr/bin/env python
 
 # Note: this script needs to be present at
@@ -82,7 +82,7 @@ f = open("lmdb/val.txt", "w")
 for _entry in VAL_SET:
 	f.write(_entry[0]+" "+_entry[1]+"\n")
 f.close()
-{% endhighlight %}
+```
 
 This can then be executed by :
 {% highlight bash %}
