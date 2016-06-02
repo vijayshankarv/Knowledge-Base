@@ -130,7 +130,7 @@ In the final step before we can start training, we need to configure the solver 
 
 The final `solver.prototxt` should look like :
 
-{% highlight prototxt %}
+```
 net: "train_val.prototxt"
 test_iter: 3
 test_interval: 59
