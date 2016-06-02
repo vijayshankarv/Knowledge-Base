@@ -106,7 +106,7 @@ $CAFFE_ROOT/build/tools/convert_imageset \
     --shuffle \
     /home/mohanty/plantvillage/ \
     lmdb/train.txt \
-    lmdb/train_lmdb`
+    lmdb/train_lmdb
 
 $CAFFE_ROOT/build/tools/convert_imageset \
     --resize_height 256 \
