@@ -12,7 +12,7 @@ A pretrained AlexNet model along with the corresponding prototxt files for caffe
 
 We download all the required files and store them in a separate folder named `AlexNet`
 
-{%highlight bash %}
+```bash
 cd /home/<your_user_name>/plantvillage
 mkdir AlexNet
 cd AlexNet
@@ -24,7 +24,7 @@ wget https://raw.githubusercontent.com/BVLC/caffe/master/models/bvlc_alexnet/dep
 wget https://raw.githubusercontent.com/BVLC/caffe/master/models/bvlc_alexnet/solver.prototxt
 
 wget https://raw.githubusercontent.com/BVLC/caffe/master/models/bvlc_alexnet/train_val.prototxt
-{% endhighlight %}
+```
 
 ### Updating LMDB data store references
 
@@ -46,7 +46,7 @@ We will do this, by editing the `train_val.prototxt` file to change the followin
     batch_size: 256
     backend: LMDB
   }
-{% endhighlight %}
+```
 
 to look like :
 
@@ -64,7 +64,7 @@ to look like :
     batch_size: 256
     backend: LMDB
   }
-{% endhighlight %}
+```
 
 We will do the same thing for the prototxt block corresponding to the validation data, by changing the following block (`line 26-38`):
 
@@ -82,7 +82,7 @@ We will do the same thing for the prototxt block corresponding to the validation
     batch_size: 50
     backend: LMDB
   }
-{% endhighlight %}
+```
 
 to look like :
 
@@ -100,29 +100,29 @@ to look like :
     batch_size: 50
     backend: LMDB
   }
-{% endhighlight %}
+```
 
 ### Adapting the downloaded AlexNet model for FineTuning on our dataset
 
 As the dataset we are working with needs to be classified across 38 classes instead of the standard 1000 classes that AlexNet was designed for; we will first change the number of outputs of the final layer from 1000 to 38. This can be done by manually editing the corresponding section for the last layer (`fc8` in this case) in both the `train_val.prototxt` and `deploy.prototxt`. The `num_output` value in that layer needs to be changed to 38 from 1000. And this can be quickly done by using :
 
-{% highlight bash %}
+```bash
 cd /home/<your_user_name>/plantvillage/AlexNet
 
 sed -i -e 's/num_output: 1000/num_output: 38/' train_val.prototxt
 
 sed -i -e 's/num_output: 1000/num_output: 38/' deploy.prototxt
-{% endhighlight %}
+```
 
 Then we also need to reset the weights in the last layer of the network, which can be very easily done by renaming the last layer, so that Caffe has to re-initialize the weights of the layer when it does not find any corresponding weights in the associated layer. This can be done by manually renaming all references to `fc8` (the last layer) in both `train_val.prototxt` and `deploy.prototxt` to `fc8_plantvillage`. Or, it can be quickly done by using :
 
-{% highlight bash %}
+```bash
 cd /home/<your_user_name>/plantvillage/AlexNet
 
 sed -i -e 's/fc8/fc8_plantvillage/' train_val.prototxt
 
 sed -i -e 's/fc8/fc8_plantvillage/' deploy.prototxt
-{% endhighlight %}
+```
 
 ### Configuring the Solver Parameters
 
@@ -145,27 +145,27 @@ weight_decay: 0.0005
 snapshot: 59
 snapshot_prefix: "../snapshots/snapshots_"
 solver_mode: GPU
-{% endhighlight %}
+```
 
 **NOTE:** The `solver_mode` parameter should be set to `CPU` if you do not have access to a GPU on the host machine. Apart from that, these parameters are mostly hyperparameters which you will need to hand tune a bit till you are confident you get the best results.
 
 we will also need to create a folder called as `snapshots` where caffe can dump the models at certain intervals. Based on the reference we gave in our `solver.prototxt`, we will have to create it at : `/home/<your_user_name>/plantvillage/snapshots`, so we should simply do a :
 
-{% highlight bash %}
+```bash
 mkdir /home/<your_user_name>/plantvillage/snapshots
-{% endhighlight %}
+```
 
 ## Training
 
 If you followed all the previous steps correctly, then you should be able to start the training simply by :
 
-{% highlight bash %}
+```bash
 cd /home/<your_user_name>/plantvillage/AlexNet
 $CAFFE_ROOT/build/tools/caffe train \
       -solver solver.prototxt \
       -weights bvlc_alexnet.caffemodel
       -gpu 0 #Only if you have a GPU, else you should ignore this flag
-{% endhighlight %}
+```
 
 If you are running the training in GPU mode, and you get an `out of memory` error, then you can try reducing the training and testing `batch_size` in `train_val.prototxt` in line_number `17` and `36`.
 
@@ -173,16 +173,16 @@ If you are running the training in GPU mode, and you get an `out of memory` erro
 
 The first step is to select the model that we will use to predict. In the `snapshots` folder, you will find many files of the form `snapshots__<iteration_number>.caffemodel` or `snapshots__<iteration_number>.solverstate`. The `*.solverstate` files are used to "resume" the training from a particular state, while the `*.caffemodel` files is primarily used for prediction, but it is pretty much the same as the solverstate file minus some training specific state variables. So we will select the latest model from among the snapshots, and use that in the following sub section for prediction all the test images. You can do that by :
 
-{% highlight bash %}
+```bash
 cd /home/<your_user_name>/plantvillage/
 cp snapshots/`ls -t snapshots/ | head -n 1` plantvillage.caffemodel
-{% endhighlight %}
+```
 
 Please note that, if you want to use the snapshot from any other iteration that the latest iteration, you can also do something like `cp snapshots/snapshots__<iteration_number>.caffemodel plantvillage.caffemodel`
 
 And now we move to the actual predictions of all the test images.
 Before we can predict the class of the images, we will have to first make them similar to the kind of images we used for training. Before we initiated the training, we "squashed" the images to `256x256 pixels`, and now we do the same to all the test images. You can do that by creating the following script at `/home/<your_user_name>/plantvillage/resize_test_images.sh`:
-{% highlight bash %}
+```bash
 #!/bin/bash
 
 TEST_FOLDER_NAME="/home/<your_user_name>/plantvillage/test"
@@ -191,18 +191,18 @@ do
 echo $file
 convert $TEST_FOLDER_NAME/$file -resize 256x256! $TEST_FOLDER_NAME/$file
 done
-{% endhighlight %}
+```
 
 Then you can execute it by :
-{% highlight bash %}
+```bash
 cd /home/<your_user_name>/plantvillage
 chmod +x resize_test_images.sh
 ./resize_test_images.sh
-{% endhighlight %}
+```
 
 Now that we have everything in order, we can use the following script to get started on how to make the predictions and put it in an appropriate format for the crowdAI PlantVillage Classification Challenge. This script has to exist at the location `/home/<your_user_name>/plantvillage/predict.py`.
 
-{% highlight python %}
+```python
 import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
@@ -271,15 +271,15 @@ for _file in glob.glob("./test/*"):
 	print "Number of files : ", number_of_files_processed
 	print 'predicted class:', prediction[0].argmax()
 	print "**********************************************"
-{% endhighlight %}
+```
 
 and then execute it by
 
-{% highlight bash %}
+```bash
 
 cd /home/<your_user_name>/plantvillage
 python predict.py
 
-{% endhighlight %}
+```
 
 Finally after this script executes successfully (this will take some time ;) So, be patient !! ), you should have a `output.csv` in the format that the CrowdAI PlantVillage Classification Challenge expects. **But please note that you will be disqualified if you use this approach to make a submission, as FineTuning / Transfer Learning based approaches are not allowed according to the rules of the challenge.**
