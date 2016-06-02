@@ -12,10 +12,11 @@ A pretrained AlexNet model along with the corresponding prototxt files for caffe
 
 We download all the required files and store them in a separate folder named `AlexNet`
 
-{%highlight bash %}
+```bash
 cd /home/<your_user_name>/plantvillage
 mkdir AlexNet
 cd AlexNet
+
 
 wget http://dl.caffe.berkeleyvision.org/bvlc_alexnet.caffemodel
 
@@ -24,7 +25,7 @@ wget https://raw.githubusercontent.com/BVLC/caffe/master/models/bvlc_alexnet/dep
 wget https://raw.githubusercontent.com/BVLC/caffe/master/models/bvlc_alexnet/solver.prototxt
 
 wget https://raw.githubusercontent.com/BVLC/caffe/master/models/bvlc_alexnet/train_val.prototxt
-{% endhighlight %}
+```
 
 ### Updating LMDB data store references
 
