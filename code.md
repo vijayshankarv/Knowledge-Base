@@ -32,7 +32,7 @@ Now that we have all the required files, we will start with first pointing the `
 
 We will do this, by editing the `train_val.prototxt` file to change the following block (`line 7-19`) :
 
-{% highlight prototxt %}
+```
   include {
     phase: TRAIN
   }
@@ -50,7 +50,7 @@ We will do this, by editing the `train_val.prototxt` file to change the followin
 
 to look like :
 
-{% highlight prototxt %}
+```
   include {
     phase: TRAIN
   }
@@ -68,7 +68,7 @@ to look like :
 
 We will do the same thing for the prototxt block corresponding to the validation data, by changing the following block (`line 26-38`):
 
-{% highlight prototxt %}
+```
   include {
     phase: TEST
   }
@@ -86,7 +86,7 @@ We will do the same thing for the prototxt block corresponding to the validation
 
 to look like :
 
-{% highlight prototxt %}
+```
   include {
     phase: TEST
   }
